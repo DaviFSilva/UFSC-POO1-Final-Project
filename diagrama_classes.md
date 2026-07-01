@@ -1,6 +1,3 @@
-# Diagrama de Classes UML
-
-```mermaid
 classDiagram
     direction TB
 
@@ -64,4 +61,3 @@ classDiagram
     TaskManager *-- Task : Composição
     
     Task o-- User : Agregação
-```
