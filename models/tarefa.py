@@ -1,10 +1,6 @@
 from models.usuario import Usuario
 
 class Tarefa:
-    """
-    Classe que representa uma Tarefa no gerenciador.
-    Demonstra Encapsulamento e Agregação (agrega instâncias de Usuario).
-    """
     def __init__(self, id_tarefa: int, titulo: str, descricao: str):
         self.__id = id_tarefa
         self.__titulo = titulo
@@ -32,7 +28,6 @@ class Tarefa:
 
     @property
     def responsaveis(self) -> list:
-        # Retorna uma cópia para proteger o encapsulamento da lista original
         return list(self.__responsaveis)
 
     @property
@@ -56,11 +51,8 @@ class Tarefa:
         else:
             raise ValueError(f"Status inválido. Escolha entre: {', '.join(status_validos)}")
 
-    # Métodos de manipulação das listas agregadas
+    # Métodos públicos
     def adicionar_responsavel(self, usuario: Usuario):
-        """
-        Agregação: Recebe uma instância de Usuario.
-        """
         if usuario not in self.__responsaveis:
             self.__responsaveis.append(usuario)
 

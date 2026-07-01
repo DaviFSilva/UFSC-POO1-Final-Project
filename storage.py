@@ -6,9 +6,6 @@ from models.tarefa import Tarefa
 DATA_FILE = "dados.json"
 
 def salvar_dados(usuarios_dict, tarefas_list):
-    """
-    Serializa os objetos e salva em um arquivo JSON.
-    """
     dados = {
         "usuarios": [],
         "tarefas": []
@@ -35,10 +32,6 @@ def salvar_dados(usuarios_dict, tarefas_list):
         json.dump(dados, f, indent=4, ensure_ascii=False)
 
 def carregar_dados():
-    """
-    Carrega e desserializa os objetos a partir do arquivo JSON.
-    Retorna a tupla (usuarios_dict, tarefas_list).
-    """
     usuarios_dict = {}
     tarefas_list = []
     
@@ -54,7 +47,7 @@ def carregar_dados():
                 usuario = Usuario(u_dados["id"], u_dados["nome"], u_dados["email"])
                 usuarios_dict[usuario.id] = usuario
                 
-            # Recriar instâncias de Tarefa e restabelecer Agregação
+            # Recriar instâncias de Tarefa
             for t_dados in dados.get("tarefas", []):
                 tarefa = Tarefa(t_dados["id"], t_dados["titulo"], t_dados["descricao"])
                 tarefa.status = t_dados["status"]

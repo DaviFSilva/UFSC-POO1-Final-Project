@@ -3,22 +3,16 @@ from models.tarefa import Tarefa
 from storage import carregar_dados, salvar_dados
 
 class TaskManager:
-    """
-    Classe responsável pelo gerenciamento de tarefas e usuários.
-    Demonstra Composição/Agregação, manipulando listas de objetos.
-    """
     def __init__(self):
         self.usuarios, self.tarefas = carregar_dados()
         self.prox_id_usuario = max(self.usuarios.keys(), default=0) + 1
         self.prox_id_tarefa = max([t.id for t in self.tarefas], default=0) + 1
 
     def salvar(self):
-        """
-        Chama o módulo de storage para salvar o estado atual.
-        """
+        # Chama o módulo de storage para salvar o estado atual.
         salvar_dados(self.usuarios, self.tarefas)
 
-    # --- CRUD de Usuários ---
+    # CRUD de Usuários
     def cadastrar_usuario(self, nome: str, email: str) -> Usuario:
         novo_usuario = Usuario(self.prox_id_usuario, nome, email)
         self.usuarios[novo_usuario.id] = novo_usuario
@@ -31,7 +25,7 @@ class TaskManager:
     def buscar_usuario(self, id_usuario: int) -> Usuario:
         return self.usuarios.get(id_usuario)
 
-    # --- CRUD de Tarefas ---
+    # CRUD de Tarefas
     def criar_tarefa(self, titulo: str, descricao: str) -> Tarefa:
         nova_tarefa = Tarefa(self.prox_id_tarefa, titulo, descricao)
         self.tarefas.append(nova_tarefa)
@@ -54,7 +48,7 @@ class TaskManager:
             return True
         return False
 
-    # --- Funcionalidades Específicas / Filtros ---
+    # Filtros
     def filtrar_por_status(self, status: str) -> list:
         return [t for t in self.tarefas if t.status.lower() == status.lower()]
 
