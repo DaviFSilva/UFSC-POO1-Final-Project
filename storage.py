@@ -3,7 +3,7 @@ import os
 from models.user import User
 from models.task import Task
 
-DATA_FILE = "dados.json"
+DATA_FILE = "data.json"
 
 def save_data(users_dict, tasks_list):
     data = {
