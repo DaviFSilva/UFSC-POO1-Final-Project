@@ -37,25 +37,25 @@ storage.py              # Módulo de persistência de dados
 data.json               # Banco de dados em JSON
 manager.py              # Lógica de gerenciamento (TaskManager)
 models/                 # Modelos de dados (Objetos)
-├── pessoa.py           # Classe base Pessoa
-├── usuario.py          # Classe Usuario (Herda de Pessoa)
-└── tarefa.py           # Classe Tarefa
+├── person.py           # Classe base Person
+├── user.py             # Classe User (Herda de Person)
+└── task.py             # Classe Task
 diagrama_classes.md     # Diagrama UML das classes
 ```
 
 ## Conceitos de POO Demonstrados
 
 ### Herança
-- A classe `Usuario` herda atributos e métodos da classe base `Pessoa`.
+- A classe `User` herda atributos e métodos da classe base `Person`.
 
 ### Encapsulamento
-- Atributos privados (ex: `__nome`, `__email`) protegidos por getters e setters.
+- Atributos privados (ex: `__name`, `__email`) protegidos por getters e setters.
 
 ### Composição
 - `TaskManager` é composto por `dict` de usuários e `list` de tarefas.
 
 ### Agregação
-- `Tarefa` agrega múltiplos `Usuario` como responsáveis.
+- `Task` agrega múltiplos `User` como responsáveis.
 
 ### Polimorfismo
-- Método `exibir_detalhes()` sobrescrito em `Usuario`.
+- Método `show_details()` sobrescrito em `User`.

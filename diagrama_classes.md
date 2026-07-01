@@ -4,39 +4,39 @@
 classDiagram
     direction TB
 
-    class Pessoa {
+    class Person {
         <<Abstract>>
         - __id: int
-        - __nome: str
+        - __name: str
         + id: int
-        + nome: str
-        + exibir_detalhes() str
+        + name: str
+        + show_details() str
     }
 
-    class Usuario {
+    class User {
         - __email: str
         + email: str
-        + exibir_detalhes() str
+        + show_details() str
     }
 
-    class Tarefa {
+    class Task {
         - __id: int
-        - __titulo: str
-        - __descricao: str
+        - __title: str
+        - __description: str
         - __status: str
-        - __responsaveis: list~Usuario~
+        - __assignees: list~User~
         - __tags: list~str~
         + id: int
-        + titulo: str
-        + descricao: str
+        + title: str
+        + description: str
         + status: str
-        + responsaveis: list
+        + assignees: list
         + tags: list
-        + adicionar_responsavel(usuario: Usuario) void
-        + remover_responsavel(usuario_id: int) void
-        + adicionar_tag(tag: str) void
-        + remover_tag(tag: str) void
-        + exibir_detalhes() str
+        + add_assignee(user: User) void
+        + remove_assignee(user_id: int) void
+        + add_tag(tag: str) void
+        + remove_tag(tag: str) void
+        + show_details() str
     }
 
     class TaskManager {
@@ -58,10 +58,10 @@ classDiagram
     }
 
     %% Relacionamentos
-    Pessoa <|-- Usuario : Herança
+    Person <|-- User : Herança
     
-    TaskManager *-- Usuario : Composição
-    TaskManager *-- Tarefa : Composição
+    TaskManager *-- User : Composição
+    TaskManager *-- Task : Composição
     
-    Tarefa o-- Usuario : Agregação
+    Task o-- User : Agregação
 ```
