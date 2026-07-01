@@ -1,65 +1,64 @@
-from models.usuario import Usuario
-from models.tarefa import Tarefa
-from storage import carregar_dados, salvar_dados
+from models.user import User
+from models.task import Task
+from storage import load_data, save_data
 
 class TaskManager:
     def __init__(self):
-        self.usuarios, self.tarefas = carregar_dados()
-        self.prox_id_usuario = max(self.usuarios.keys(), default=0) + 1
-        self.prox_id_tarefa = max([t.id for t in self.tarefas], default=0) + 1
+        self.users, self.tasks = load_data()
+        self.next_user_id = max(self.users.keys(), default=0) + 1
+        self.next_task_id = max([t.id for t in self.tasks], default=0) + 1
 
-    def salvar(self):
-        # Chama o módulo de storage para salvar o estado atual.
-        salvar_dados(self.usuarios, self.tarefas)
+    def save(self):
+        save_data(self.users, self.tasks)
 
-    # CRUD de Usuários
-    def cadastrar_usuario(self, nome: str, email: str) -> Usuario:
-        novo_usuario = Usuario(self.prox_id_usuario, nome, email)
-        self.usuarios[novo_usuario.id] = novo_usuario
-        self.prox_id_usuario += 1
-        return novo_usuario
+    # Users CRUD
+    def register_user(self, name: str, email: str) -> User:
+        new_user = User(self.next_user_id, name, email)
+        self.users[new_user.id] = new_user
+        self.next_user_id += 1
+        return new_user
 
-    def listar_usuarios(self) -> list:
-        return list(self.usuarios.values())
+    def list_users(self) -> list:
+        return list(self.users.values())
 
-    def buscar_usuario(self, id_usuario: int) -> Usuario:
-        return self.usuarios.get(id_usuario)
+    def get_user(self, user_id: int) -> User:
+        return self.users.get(user_id)
 
-    # CRUD de Tarefas
-    def criar_tarefa(self, titulo: str, descricao: str) -> Tarefa:
-        nova_tarefa = Tarefa(self.prox_id_tarefa, titulo, descricao)
-        self.tarefas.append(nova_tarefa)
-        self.prox_id_tarefa += 1
-        return nova_tarefa
+    # Tasks CRUD
+    def create_task(self, title: str, description: str) -> Task:
+        new_task = Task(self.next_task_id, title, description)
+        self.tasks.append(new_task)
+        self.next_task_id += 1
+        return new_task
 
-    def consultar_tarefas(self) -> list:
-        return self.tarefas
+    def get_all_tasks(self) -> list:
+        return self.tasks
         
-    def buscar_tarefa(self, id_tarefa: int) -> Tarefa:
-        for t in self.tarefas:
-            if t.id == id_tarefa:
+    def get_task(self, task_id: int) -> Task:
+        for t in self.tasks:
+            if t.id == task_id:
                 return t
         return None
 
-    def excluir_tarefa(self, id_tarefa: int) -> bool:
-        tarefa = self.buscar_tarefa(id_tarefa)
-        if tarefa:
-            self.tarefas.remove(tarefa)
+    def delete_task(self, task_id: int) -> bool:
+        task = self.get_task(task_id)
+        if task:
+            self.tasks.remove(task)
             return True
         return False
 
-    # Filtros
-    def filtrar_por_status(self, status: str) -> list:
-        return [t for t in self.tarefas if t.status.lower() == status.lower()]
+    # Filters
+    def filter_by_status(self, status: str) -> list:
+        return [t for t in self.tasks if t.status.lower() == status.lower()]
 
-    def filtrar_por_responsavel(self, id_usuario: int) -> list:
-        tarefas_usuario = []
-        for t in self.tarefas:
-            for resp in t.responsaveis:
-                if resp.id == id_usuario:
-                    tarefas_usuario.append(t)
+    def filter_by_assignee(self, user_id: int) -> list:
+        user_tasks = []
+        for t in self.tasks:
+            for assignee in t.assignees:
+                if assignee.id == user_id:
+                    user_tasks.append(t)
                     break
-        return tarefas_usuario
+        return user_tasks
 
-    def filtrar_por_tag(self, tag: str) -> list:
-        return [t for t in self.tarefas if tag.lower() in t.tags]
+    def filter_by_tag(self, tag: str) -> list:
+        return [t for t in self.tasks if tag.lower() in t.tags]

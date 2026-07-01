@@ -1,6 +1,6 @@
 from manager import TaskManager
 
-def exibir_menu():
+def show_menu():
     print("\n" + "="*30)
     print("=== TASK MANAGER CLI ===")
     print("="*30)
@@ -14,48 +14,48 @@ def exibir_menu():
     print("0. Sair")
     print("="*30)
 
-def cadastrar_usuario_show(gerenciador):
-    nome = input("Nome do usuário: ")
+def register_user_show(manager):
+    name = input("Nome do usuário: ")
     email = input("Email do usuário: ")
     try:
-        usuario = gerenciador.cadastrar_usuario(nome, email)
-        gerenciador.salvar()
-        print(f"Usuário '{usuario.nome}' cadastrado com ID {usuario.id}!")
+        user = manager.register_user(name, email)
+        manager.save()
+        print(f"Usuário '{user.name}' cadastrado com ID {user.id}!")
     except ValueError as e:
         print(f"Erro: {e}")
 
-def listar_usuarios_show(gerenciador):
-    usuarios = gerenciador.listar_usuarios()
-    if not usuarios:
+def list_users_show(manager):
+    users = manager.list_users()
+    if not users:
         print("Nenhum usuário cadastrado.")
     else:
-        for u in usuarios:
-            print(u.exibir_detalhes())
+        for u in users:
+            print(u.show_details())
 
-def criar_tarefa_show(gerenciador):
-    titulo = input("Título da Tarefa: ")
-    descricao = input("Descrição: ")
-    tarefa = gerenciador.criar_tarefa(titulo, descricao)
-    gerenciador.salvar()
-    print(f"Tarefa '{tarefa.titulo}' criada com ID {tarefa.id}!")
+def create_task_show(manager):
+    title = input("Título da Tarefa: ")
+    description = input("Descrição: ")
+    task = manager.create_task(title, description)
+    manager.save()
+    print(f"Tarefa '{task.title}' criada com ID {task.id}!")
 
-def listar_tarefas_show(gerenciador):
-    tarefas = gerenciador.consultar_tarefas()
-    if not tarefas:
+def list_tasks_show(manager):
+    tasks = manager.get_all_tasks()
+    if not tasks:
         print("Nenhuma tarefa cadastrada.")
     else:
-        for t in tarefas:
-            print(f"ID {t.id} - {t.titulo} [{t.status}]")
+        for t in tasks:
+            print(f"ID {t.id} - {t.title} [{t.status}]")
 
-def alterar_tarefa_show(gerenciador):
+def update_task_show(manager):
     try:
-        id_tarefa = int(input("Digite o ID da tarefa: "))
-        tarefa = gerenciador.buscar_tarefa(id_tarefa)
-        if not tarefa:
+        task_id = int(input("Digite o ID da tarefa: "))
+        task = manager.get_task(task_id)
+        if not task:
             print("Tarefa não encontrada.")
             return
         
-        print("\n" + tarefa.exibir_detalhes())
+        print("\n" + task.show_details())
         print("\nO que deseja alterar?")
         print("1. Alterar Status")
         print("2. Adicionar Responsável")
@@ -64,101 +64,100 @@ def alterar_tarefa_show(gerenciador):
         print("5. Remover Tag")
         print("0. Voltar")
         
-        sub_opcao = input("Escolha: ")
-        if sub_opcao == "1":
-            novo_status = input("Novo Status (Pendente, Em Andamento, Concluída, Cancelada): ")
-            tarefa.status = novo_status
+        sub_option = input("Escolha: ")
+        if sub_option == "1":
+            new_status = input("Novo Status (Pendente, Em Andamento, Concluída, Cancelada): ")
+            task.status = new_status
             print("Status atualizado!")
-        elif sub_opcao == "2":
-            id_usuario = int(input("ID do Usuário responsável: "))
-            usuario = gerenciador.buscar_usuario(id_usuario)
-            if usuario:
-                tarefa.adicionar_responsavel(usuario)
+        elif sub_option == "2":
+            user_id = int(input("ID do Usuário responsável: "))
+            user = manager.get_user(user_id)
+            if user:
+                task.add_assignee(user)
                 print("Responsável adicionado!")
             else:
                 print("Usuário não encontrado.")
-        elif sub_opcao == "3":
-            id_usuario = int(input("ID do Usuário a remover: "))
-            tarefa.remover_responsavel(id_usuario)
+        elif sub_option == "3":
+            user_id = int(input("ID do Usuário a remover: "))
+            task.remove_assignee(user_id)
             print("Responsável removido (se existia)!")
-        elif sub_opcao == "4":
+        elif sub_option == "4":
             tag = input("Nova Tag: ")
-            tarefa.adicionar_tag(tag)
+            task.add_tag(tag)
             print("Tag adicionada!")
-        elif sub_opcao == "5":
+        elif sub_option == "5":
             tag = input("Tag a remover: ")
-            tarefa.remover_tag(tag)
+            task.remove_tag(tag)
             print("Tag removida (se existia)!")
         
-        # Salva alterações feitas na tarefa
-        gerenciador.salvar()
+        manager.save()
     except ValueError as e:
         print(f"Erro de entrada: {e}")
 
-def excluir_tarefa_show(gerenciador):
+def delete_task_show(manager):
     try:
-        id_tarefa = int(input("Digite o ID da tarefa a ser excluída: "))
-        if gerenciador.excluir_tarefa(id_tarefa):
-            gerenciador.salvar()
+        task_id = int(input("Digite o ID da tarefa a ser excluída: "))
+        if manager.delete_task(task_id):
+            manager.save()
             print("Tarefa excluída com sucesso!")
         else:
             print("Tarefa não encontrada.")
     except ValueError:
         print("ID inválido.")
 
-def filtrar_tarefas_show(gerenciador):
+def filter_tasks_show(manager):
     print("\nFiltrar por:")
     print("1. Status")
     print("2. Responsável")
     print("3. Tag")
-    filtro = input("Escolha: ")
+    filter_type = input("Escolha: ")
     
-    tarefas_filtradas = []
-    if filtro == "1":
+    filtered_tasks = []
+    if filter_type == "1":
         status = input("Digite o status: ")
-        tarefas_filtradas = gerenciador.filtrar_por_status(status)
-    elif filtro == "2":
+        filtered_tasks = manager.filter_by_status(status)
+    elif filter_type == "2":
         try:
-            id_usu = int(input("Digite o ID do responsável: "))
-            tarefas_filtradas = gerenciador.filtrar_por_responsavel(id_usu)
+            user_id = int(input("Digite o ID do responsável: "))
+            filtered_tasks = manager.filter_by_assignee(user_id)
         except ValueError:
             print("ID inválido.")
-    elif filtro == "3":
+    elif filter_type == "3":
         tag = input("Digite a tag: ")
-        tarefas_filtradas = gerenciador.filtrar_por_tag(tag)
+        filtered_tasks = manager.filter_by_tag(tag)
     
-    if tarefas_filtradas:
-        print(f"\nEncontradas {len(tarefas_filtradas)} tarefas:")
-        for t in tarefas_filtradas:
-            print(t.exibir_detalhes())
+    if filtered_tasks:
+        print(f"\nEncontradas {len(filtered_tasks)} tarefas:")
+        for t in filtered_tasks:
+            print(t.show_details())
     else:
         print("\nNenhuma tarefa encontrada com este filtro.")
 
 
 def main():
-    gerenciador = TaskManager()
+    manager = TaskManager()
     
     while True:
-        exibir_menu()
-        opcao = input("Escolha uma opção: ")
+        show_menu()
+        option = input("Escolha uma opção: ")
         
-        if opcao == "0":
+        if option == "0":
             print("Saindo do Task Manager...")
             break
-        elif opcao == "1":
-            cadastrar_usuario_show(gerenciador)
-        elif opcao == "2":
-            listar_usuarios_show(gerenciador)
-        elif opcao == "3":
-            criar_tarefa_show(gerenciador)
-        elif opcao == "4":
-            listar_tarefas_show(gerenciador)
-        elif opcao == "5":
-            alterar_tarefa_show(gerenciador)
-        elif opcao == "6":
-            excluir_tarefa_show(gerenciador)
-        elif opcao == "7":
-            filtrar_tarefas_show(gerenciador)
+        elif option == "1":
+            register_user_show(manager)
+        elif option == "2":
+            list_users_show(manager)
+        elif option == "3":
+            create_task_show(manager)
+        elif option == "4":
+            list_tasks_show(manager)
+        elif option == "5":
+            update_task_show(manager)
+        elif option == "6":
+            delete_task_show(manager)
+        elif option == "7":
+            filter_tasks_show(manager)
         else:
             print("Opção inválida!")
 

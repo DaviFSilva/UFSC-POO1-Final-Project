@@ -1,67 +1,65 @@
 import json
 import os
-from models.usuario import Usuario
-from models.tarefa import Tarefa
+from models.user import User
+from models.task import Task
 
 DATA_FILE = "dados.json"
 
-def salvar_dados(usuarios_dict, tarefas_list):
-    dados = {
-        "usuarios": [],
-        "tarefas": []
+def save_data(users_dict, tasks_list):
+    data = {
+        "users": [],
+        "tasks": []
     }
     
-    for u in usuarios_dict.values():
-        dados["usuarios"].append({
+    for u in users_dict.values():
+        data["users"].append({
             "id": u.id,
-            "nome": u.nome,
+            "name": u.name,
             "email": u.email
         })
         
-    for t in tarefas_list:
-        dados["tarefas"].append({
+    for t in tasks_list:
+        data["tasks"].append({
             "id": t.id,
-            "titulo": t.titulo,
-            "descricao": t.descricao,
+            "title": t.title,
+            "description": t.description,
             "status": t.status,
-            "responsaveis": [u.id for u in t.responsaveis],
+            "assignees": [u.id for u in t.assignees],
             "tags": t.tags
         })
         
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=4, ensure_ascii=False)
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
-def carregar_dados():
-    usuarios_dict = {}
-    tarefas_list = []
+def load_data():
+    users_dict = {}
+    tasks_list = []
     
     if not os.path.exists(DATA_FILE):
-        return usuarios_dict, tarefas_list
+        return users_dict, tasks_list
         
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
-            dados = json.load(f)
+            data = json.load(f)
             
-            # Recriar instâncias de Usuario
-            for u_dados in dados.get("usuarios", []):
-                usuario = Usuario(u_dados["id"], u_dados["nome"], u_dados["email"])
-                usuarios_dict[usuario.id] = usuario
+            for u_data in data.get("users", []):
+                user = User(u_data["id"], u_data["name"], u_data["email"])
+                users_dict[user.id] = user
                 
-            # Recriar instâncias de Tarefa
-            for t_dados in dados.get("tarefas", []):
-                tarefa = Tarefa(t_dados["id"], t_dados["titulo"], t_dados["descricao"])
-                tarefa.status = t_dados["status"]
+            for t_data in data.get("tasks", []):
+                task = Task(t_data["id"], t_data["title"], t_data["description"])
+                task.status = t_data["status"]
                 
-                for tag in t_dados.get("tags", []):
-                    tarefa.adicionar_tag(tag)
+                for tag in t_data.get("tags", []):
+                    task.add_tag(tag)
                     
-                for resp_id in t_dados.get("responsaveis", []):
-                    if resp_id in usuarios_dict:
-                        tarefa.adicionar_responsavel(usuarios_dict[resp_id])
+                for assignee_id in t_data.get("assignees", []):
+                    if assignee_id in users_dict:
+                        task.add_assignee(users_dict[assignee_id])
                         
-                tarefas_list.append(tarefa)
+                tasks_list.append(task)
                 
     except (json.JSONDecodeError, KeyError) as e:
         print(f"Erro ao carregar os dados: {e}. Iniciando com dados vazios.")
         
-    return usuarios_dict, tarefas_list
+    return users_dict, tasks_list
