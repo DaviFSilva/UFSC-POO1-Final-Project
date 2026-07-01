@@ -30,6 +30,7 @@ def main():
             email = input("Email do usuário: ")
             try:
                 usuario = gerenciador.cadastrar_usuario(nome, email)
+                gerenciador.salvar()
                 print(f"Usuário '{usuario.nome}' cadastrado com ID {usuario.id}!")
             except ValueError as e:
                 print(f"Erro: {e}")
@@ -46,6 +47,7 @@ def main():
             titulo = input("Título da Tarefa: ")
             descricao = input("Descrição: ")
             tarefa = gerenciador.criar_tarefa(titulo, descricao)
+            gerenciador.salvar()
             print(f"Tarefa '{tarefa.titulo}' criada com ID {tarefa.id}!")
             
         elif opcao == "4":
@@ -98,6 +100,9 @@ def main():
                     tag = input("Tag a remover: ")
                     tarefa.remover_tag(tag)
                     print("Tag removida (se existia)!")
+                
+                # Salva alterações feitas na tarefa
+                gerenciador.salvar()
             except ValueError as e:
                 print(f"Erro de entrada: {e}")
                 
@@ -105,6 +110,7 @@ def main():
             try:
                 id_tarefa = int(input("Digite o ID da tarefa a ser excluída: "))
                 if gerenciador.excluir_tarefa(id_tarefa):
+                    gerenciador.salvar()
                     print("Tarefa excluída com sucesso!")
                 else:
                     print("Tarefa não encontrada.")

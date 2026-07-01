@@ -1,5 +1,6 @@
 from models.usuario import Usuario
 from models.tarefa import Tarefa
+from storage import carregar_dados, salvar_dados
 
 class TaskManager:
     """
@@ -7,10 +8,15 @@ class TaskManager:
     Demonstra Composição/Agregação, manipulando listas de objetos.
     """
     def __init__(self):
-        self.usuarios = {} # Dicionário {id_usuario: objeto_Usuario}
-        self.tarefas = []  # Lista de objetos Tarefa
-        self.prox_id_usuario = 1
-        self.prox_id_tarefa = 1
+        self.usuarios, self.tarefas = carregar_dados()
+        self.prox_id_usuario = max(self.usuarios.keys(), default=0) + 1
+        self.prox_id_tarefa = max([t.id for t in self.tarefas], default=0) + 1
+
+    def salvar(self):
+        """
+        Chama o módulo de storage para salvar o estado atual.
+        """
+        salvar_dados(self.usuarios, self.tarefas)
 
     # --- CRUD de Usuários ---
     def cadastrar_usuario(self, nome: str, email: str) -> Usuario:
