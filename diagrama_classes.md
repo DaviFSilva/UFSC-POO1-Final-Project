@@ -40,21 +40,21 @@ classDiagram
     }
 
     class TaskManager {
-        - usuarios: dict
-        - tarefas: list
-        - prox_id_usuario: int
-        - prox_id_tarefa: int
-        + salvar() void
-        + cadastrar_usuario(nome, email) Usuario
-        + listar_usuarios() list
-        + buscar_usuario(id) Usuario
-        + criar_tarefa(titulo, descricao) Tarefa
-        + consultar_tarefas() list
-        + buscar_tarefa(id) Tarefa
-        + excluir_tarefa(id) bool
-        + filtrar_por_status(status) list
-        + filtrar_por_responsavel(id) list
-        + filtrar_por_tag(tag) list
+        - users: dict
+        - tasks: list
+        - next_user_id: int
+        - next_task_id: int
+        + save() void
+        + register_user(name, email) User
+        + list_users() list
+        + get_user(id) User
+        + create_task(title, description) Task
+        + get_all_tasks() list
+        + get_task(id) Task
+        + delete_task(id) bool
+        + filter_by_status(status) list
+        + filter_by_assignee(id) list
+        + filter_by_tag(tag) list
     }
 
     %% Relacionamentos
