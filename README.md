@@ -19,8 +19,8 @@ Este projeto é uma aplicação de gerenciamento de tarefas que demonstra concei
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu_usuario/seu_projeto.git
-   cd seu_projeto
+   git clone https://github.com/DaviFSilva/UFSC-POO1-Final-Project.git
+   cd UFSC-POO1-Final-Project
    ```
 
 2. Execute a aplicação:
