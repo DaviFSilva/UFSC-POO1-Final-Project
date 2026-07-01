@@ -6,11 +6,12 @@ def show_menu():
     print("="*30)
     print("1. Cadastrar Usuário")
     print("2. Listar Usuários")
-    print("3. Criar Tarefa")
-    print("4. Listar Todas as Tarefas")
-    print("5. Detalhes/Alterar Tarefa")
-    print("6. Excluir Tarefa")
-    print("7. Filtrar Tarefas")
+    print("3. Excluir Usuário")
+    print("4. Criar Tarefa")
+    print("5. Listar Todas as Tarefas")
+    print("6. Detalhes/Alterar Tarefa")
+    print("7. Excluir Tarefa")
+    print("8. Filtrar Tarefas")
     print("0. Sair")
     print("="*30)
 
@@ -105,6 +106,17 @@ def delete_task_show(manager):
     except ValueError:
         print("ID inválido.")
 
+def delete_user_show(manager):
+    try:
+        user_id = int(input("Digite o ID do usuário a ser excluído: "))
+        if manager.delete_user(user_id):
+            manager.save()
+            print("Usuário excluído com sucesso!")
+        else:
+            print("Usuário não encontrado.")
+    except ValueError:
+        print("ID inválido.")
+
 def filter_tasks_show(manager):
     print("\nFiltrar por:")
     print("1. Status")
@@ -149,14 +161,16 @@ def main():
         elif option == "2":
             list_users_show(manager)
         elif option == "3":
-            create_task_show(manager)
+            delete_user_show(manager)
         elif option == "4":
-            list_tasks_show(manager)
+            create_task_show(manager)
         elif option == "5":
-            update_task_show(manager)
+            list_tasks_show(manager)
         elif option == "6":
-            delete_task_show(manager)
+            update_task_show(manager)
         elif option == "7":
+            delete_task_show(manager)
+        elif option == "8":
             filter_tasks_show(manager)
         else:
             print("Opção inválida!")

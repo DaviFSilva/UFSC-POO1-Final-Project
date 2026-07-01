@@ -24,6 +24,16 @@ class TaskManager:
     def get_user(self, user_id: int) -> User:
         return self.users.get(user_id)
 
+    def delete_user(self, user_id: int) -> bool:
+        user = self.get_user(user_id)
+        if user:
+            # Remove o usuário de todas as tarefas onde ele está alocado
+            for task in self.tasks:
+                task.remove_assignee(user_id)
+            del self.users[user_id]
+            return True
+        return False
+
     # Tasks CRUD
     def create_task(self, title: str, description: str) -> Task:
         new_task = Task(self.next_task_id, title, description)

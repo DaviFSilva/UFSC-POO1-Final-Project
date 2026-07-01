@@ -45,6 +45,7 @@ classDiagram
         + register_user(name, email) User
         + list_users() list
         + get_user(id) User
+        + delete_user(id) bool
         + create_task(title, description) Task
         + get_all_tasks() list
         + get_task(id) Task
