@@ -3,7 +3,10 @@ from models.person import Person
 class User(Person):
     def __init__(self, user_id: int, name: str, email: str):
         super().__init__(user_id, name)
-        self.__email = email
+        if "@" in email:
+            self.__email = email
+        else:
+            raise ValueError("Email inválido.")
 
     @property
     def email(self) -> str:
